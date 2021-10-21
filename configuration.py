@@ -30,6 +30,7 @@ rr_IF =  30e6  # rr -> readout resonator
 
 qubit_LO = 6.345e9
 
+gauss_len=200
 
 rr_freq = 7.26e9
 rr_LO = rr_freq - rr_IF
@@ -44,8 +45,8 @@ config = {
             'analog_outputs': {
 				1: {'offset': 0.0},  #Voltage source I
 				2: {'offset': 0.0},  #Voltage source Q
-                5: {'offset': 0.0},  # qubit I
-                6: {'offset': 0.0},  # qubit Q
+                5: {'offset': -0.025},  # qubit I
+                6: {'offset': -0.008},  # qubit Q
                 3: {'offset': 0.0},  # RR I
                 4: {'offset': 0.0},  # RR Q
             },
@@ -161,7 +162,7 @@ config = {
 
         "gaussian_pulse": {
             'operation': 'control',
-            'length': 60,
+            'length': gauss_len,
             'waveforms': {
                 'I': 'gauss_wf',
                 'Q': 'zero_wf'
@@ -241,7 +242,7 @@ config = {
 
         'gauss_wf': {
             'type': 'arbitrary',
-            'samples': gauss(0.4, 0.0, 6.0, 60)
+            'samples': gauss(0.49, 0.0, gauss_len//4, gauss_len)
         },
 
         'pi_wf': {
@@ -302,7 +303,7 @@ config = {
     'mixers': {
         'mixer_qubit': [
             {'intermediate_frequency': qubit_IF, 'lo_frequency': qubit_LO,
-             'correction':  IQ_imbalance(0.0, 0.0)},
+             'correction':  IQ_imbalance(-0.01, -0.02)},
         ],
         'mixer_RR': [
             {'intermediate_frequency': rr_IF, 'lo_frequency': rr_LO,
